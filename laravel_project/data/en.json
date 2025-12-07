@@ -1,0 +1,5 @@
+{
+  "genres": ["Pop", "Jazz", "Electronic", "Ambient", "Rock"],
+  "artists": ["John Doe", "Mary Jane", "The Rockers", "Alice Smith", "DJ Echo"],
+  "albums": ["Sunset", "Moonlight", "Starlight", "Single", "Eclipse"]
+}

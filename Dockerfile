@@ -14,25 +14,24 @@ RUN apt-get update && apt-get install -y \
 # Step 3: Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Step 4: Set working directory
-WORKDIR /var/www/html
+# Step 4: Set working directory to Laravel folder
+WORKDIR /var/www/html/laravel_project
 
 # Step 5: Copy Laravel project files
-COPY laravel_project/ /var/www/html/
+COPY laravel_project/ /var/www/html/laravel_project/
 
-# Step 6: Set permissions for Laravel storage and cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Step 6: Set permissions for Laravel
+RUN chown -R www-data:www-data /var/www/html/laravel_project \
+    && chmod -R 755 /var/www/html/laravel_project
 
 # Step 7: Serve Laravel's public folder
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/laravel_project/public|' /etc/apache2/sites-available/000-default.conf
-
 
 # Step 8: Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Step 9: Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --working-dir=/var/www/html
+RUN composer install --no-dev --optimize-autoloader
 
 # Step 10: Expose port 80
 EXPOSE 80

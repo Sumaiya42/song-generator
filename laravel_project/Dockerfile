@@ -1,35 +1,40 @@
-# Use official PHP image with Apache
+# Step 1: Use PHP + Apache base image
 FROM php:8.2-apache
 
-# Set working directory
-WORKDIR /var/www/html
-
-# Install dependencies
+# Step 2: Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
-    libpng-dev \
     libonig-dev \
-    && docker-php-ext-install pdo pdo_mysql zip mbstring
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip
 
-# Enable Apache rewrite module
+# Step 3: Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Copy project files to container
-COPY . /var/www/html
+# Step 4: Set working directory
+WORKDIR /var/www/html
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Step 5: Copy project files
+COPY . .
 
-# Install Laravel dependencies
-RUN composer install --no-interaction --optimize-autoloader
+# Step 6: Set permissions for Laravel
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Step 7: Serve Laravel's public folder
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
 
-# Expose port 80
+# Step 8: Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Step 9: Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Step 10: Expose port 80
 EXPOSE 80
 
-# Start Apache
+# Step 11: Start Apache
 CMD ["apache2-foreground"]

@@ -25,7 +25,8 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Step 7: Serve Laravel's public folder
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/laravel_project/public|' /etc/apache2/sites-available/000-default.conf
+
 
 # Step 8: Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

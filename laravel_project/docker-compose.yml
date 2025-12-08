@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    ports:
+      - "8080:80"
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: song_generator_db
+      DB_USERNAME: song_generator_db_user
+      DB_PASSWORD: Ytj6pS3Y6OwtkBU5bm4XCvY6L1Xm5P1b
+      APP_ENV: local
+      APP_DEBUG: true
+    depends_on:
+      - db
+    volumes:
+      - .:/var/www/html
+
+  db:
+    image: postgres:15
+    container_name: laravel_db
+    environment:
+      POSTGRES_DB: song_generator_db
+      POSTGRES_USER: song_generator_db_user
+      POSTGRES_PASSWORD: Ytj6pS3Y6OwtkBU5bm4XCvY6L1Xm5P1b
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

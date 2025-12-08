@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip \
+    && docker-php-ext-install pdo pdo_pgsql pdo_mysql mbstring zip \
     && a2enmod rewrite
 
 # Step 3: Set working directory
@@ -31,7 +31,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Step 8: Set Apache DocumentRoot to Laravel public folder
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
 
-# Step 9: Clear Laravel caches (optional but safe)
+# Step 9: Clear Laravel caches
 RUN php artisan config:clear && \
     php artisan cache:clear && \
     php artisan route:clear && \

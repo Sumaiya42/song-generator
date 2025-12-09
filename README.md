@@ -29,31 +29,34 @@ A Laravel-based web application that dynamically generates random, reproducible 
 
 ---
 
-## How to Test
+## How to Test Locally (Using Docker)
 
-1. Open the deployed project link in a browser.  
-2. Use the toolbar to:
-   - Switch language (English/Bangla).
-   - Enter a seed or leave it empty (random seed).
-   - Adjust likes per song (fractional values allowed, e.g., 0.5, 1.2, 5).
-   - Switch between Table and Gallery views.
-3. **Table View:**
-   - Click a row to expand/collapse song details.
-   - Play the audio preview and read the review.
-4. **Gallery View:**
-   - Scroll to load more songs infinitely.
-   - Play audio previews directly on the cards.
-5. **Verify reproducibility:**
-   - Enter a seed, change other parameters, then return to the same seed.
-   - Song titles, artists, albums, and genres should remain identical.
+1. Clone the repository
+   \\\ bash
+    git clone https://github.com/Sumaiya42/song-generator.git
+    cd song-generator/laravel_project
+
+2. Copy environment file
+    \\\ bash
+    cp .env.example .env
+   
+3. Build and start Docker containers
+   \\\ bash
+   docker-compose build app
+   docker-compose up -d
+
+4. Run database migrations
+   \\\ bash
+   docker-compose exec app php artisan migrate
+
+7. Open a browser and go to: http://localhost:8080
 
 ---
 
 ## Links
 
-- **Deployed Project:** [Your Deployment Link](https://example.com)  
-- **GitHub Repository:** [song-generator](https://github.com/YourUsername/song-generator)  
-- **Video Demonstration:** [Demo Video](https://example.com/video)
+- **Deployed Project:** [Your Deployment Link](https://song-generator-11.onrender.com)  
+- **GitHub Repository:** [song-generator](https://github.com/Sumaiya42/song-generator)  
 
 ---
 

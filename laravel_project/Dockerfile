@@ -9,8 +9,10 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
+    libpq-dev \   # <-- ADD THIS for PostgreSQL
     && docker-php-ext-install pdo pdo_pgsql pdo_mysql mbstring zip \
     && a2enmod rewrite
+
 
 # Step 3: Set working directory
 WORKDIR /var/www/html
@@ -26,22 +28,13 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Step 7: Set permissions for storage and cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+ && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Step 8: Set Apache DocumentRoot to Laravel public folder
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
 
-# Step 9: Clear Laravel caches
-RUN php artisan config:clear && \
-    php artisan cache:clear && \
-    php artisan route:clear && \
-    php artisan view:clear
-
-# Step 10: Generate APP_KEY if missing
-RUN php artisan key:generate
-
-# Step 11: Expose port 80
+# Step 9: Expose port 80
 EXPOSE 80
 
-# Step 12: Start Apache
+# Step 10: Start Apache
 CMD ["apache2-foreground"]

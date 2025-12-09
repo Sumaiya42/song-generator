@@ -1,7 +1,7 @@
 # Step 1: Use PHP + Apache base image
 FROM php:8.2-apache
 
-# Step 2: Install system dependencies
+# Step 2: Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     libonig-dev \
     libzip-dev \
@@ -9,9 +9,10 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
-    libpq-dev \   # <-- ADD THIS for PostgreSQL
-    && docker-php-ext-install pdo pdo_pgsql pdo_mysql mbstring zip \
-    && a2enmod rewrite
+    libpq-dev \
+&& docker-php-ext-install pdo pdo_pgsql pdo_mysql mbstring zip \
+&& a2enmod rewrite
+
 
 
 # Step 3: Set working directory
